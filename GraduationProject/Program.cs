@@ -1,4 +1,7 @@
 
+using GraduationProject.Infrastructure.Database;
+using Microsoft.EntityFrameworkCore;
+
 namespace GraduationProject
 {
     public class Program
@@ -13,6 +16,13 @@ namespace GraduationProject
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Registering DbContext
+
+            builder.Services.AddDbContext<UserDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             var app = builder.Build();
 

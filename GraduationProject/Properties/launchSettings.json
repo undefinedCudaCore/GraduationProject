@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "http": {
+    "Graduation": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
@@ -19,7 +19,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "https": {
+    "GraduationProject": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

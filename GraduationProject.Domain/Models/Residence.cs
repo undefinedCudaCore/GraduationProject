@@ -1,14 +1,13 @@
 ﻿namespace GraduationProject.Domain.Models
 {
-    public class UserResidence
+    public class Residence
     {
-        public Guid UserResidenceId { get; set; }
+        public Guid ResidenceId { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
         public string HouseNumber { get; set; }
         public string ApartmentNumber { get; set; }
-
-        public int UserInformationId { get; set; }
-        public UserInformation UserInformation { get; set; }
+        public Guid InformationId { get; set; }
+        public Information Information { get; set; }
     }
 }
