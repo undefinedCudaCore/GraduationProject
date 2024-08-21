@@ -9,6 +9,7 @@
         public string EmailAddress { get; set; }
         public string? FileName { get; set; }
         public byte[]? FileData { get; set; }
+        public DateTime CreationDateTime { get; set; } = DateTime.UtcNow;
 
         public int UserId { get; set; }
         public IList<UserResidence> UserResidences { get; set; }
