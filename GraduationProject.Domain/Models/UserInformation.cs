@@ -1,7 +1,8 @@
 ﻿namespace GraduationProject.Domain.Models
 {
-    internal class UserInformation
+    public class UserInformation
     {
+        public Guid UserInformationId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int PersonalCode { get; set; }

@@ -1,7 +1,8 @@
 ﻿namespace GraduationProject.Domain.Models
 {
-    internal class UserResidence
+    public class UserResidence
     {
+        public Guid UserResidenceId { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
         public string HouseNumber { get; set; }
