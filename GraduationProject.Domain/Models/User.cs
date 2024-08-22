@@ -8,6 +8,7 @@
         public byte[] Salt { get; set; }
         public string Role { get; set; }
         public DateTime CreationDateTime { get; set; } = DateTime.UtcNow;
-        public UserInformation UserInformation { get; set; }
+        public Guid InformationId { get; set; }
+        public Information Information { get; set; }
     }
 }

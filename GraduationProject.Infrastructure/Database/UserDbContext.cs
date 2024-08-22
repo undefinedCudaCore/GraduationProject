@@ -4,19 +4,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GraduationProject.Infrastructure.Database
 {
-    internal class UserDbContext : DbContext
+    public class UserDbContext : DbContext
     {
         public UserDbContext(DbContextOptions<UserDbContext> options) : base(options) { }
 
+        public DbSet<Residence> Residences { get; set; }
+        public DbSet<Information> Informations { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<UserInformation> UserInformations { get; set; }
-        public DbSet<UserResidence> UserResidences { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new InformationConfiguration());
+            modelBuilder.ApplyConfiguration(new ResidenceConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new UserInformationConfiguration());
-            modelBuilder.ApplyConfiguration(new UserResidenceConfiguration());
         }
     }
 }
