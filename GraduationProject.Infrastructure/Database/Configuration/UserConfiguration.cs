@@ -43,7 +43,7 @@ namespace GraduationProject.Infrastructure.Database.Configuration
             builder.HasIndex(u => u.Username)
             .IsUnique();
 
-            ////Seed data
+            //Seed data
             //builder.HasData(
             //    new User
             //    {
@@ -53,31 +53,9 @@ namespace GraduationProject.Infrastructure.Database.Configuration
             //        Salt = new byte[] { (byte)4, (byte)3, (byte)2 },
             //        Role = "User",
             //        CreationDateTime = DateTime.Now,
-            //        UserInformation = new UserInformation
-            //        {
-            //            UserInformationId = new Guid("3dcd569f-5cb1-4f64-9ed0-5f02c7a2e250"),
-            //            FirstName = "John",
-            //            LastName = "Doe",
-            //            PersonalCode = 12345678912,
-            //            PhoneNumber = "112",
-            //            EmailAddress = "john@doe.com",
-            //            FileName = "pic01.jpg",
-            //            FileData = new byte[] { (byte)4, (byte)3, (byte)2 },
-            //            UserId = new Guid("88685614-3690-4835-a749-a3fa0c3a18a7"),
-            //            UserResidences = new List<UserResidence>()
-            //            {
-            //                new UserResidence
-            //                {
-            //                    UserInformationId = new Guid("40ad82b2-758e-4a4c-91ba-b50720a7f6b2"),
-            //                    City = "New York",
-            //                    Street = "Oston road",
-            //                    HouseNumber = "54",
-            //                    ApartmentNumber = "02",
-            //                    UserResidenceId = new Guid("3dcd569f-5cb1-4f64-9ed0-5f02c7a2e250"),
-            //                }
-            //            }
-            //        }
-            //    },
+            //        InformationId = new Guid("40ad82b2-758e-4a4c-91ba-b50720a7f6b2"),
+            //    }
+            //    ,
             //    new User
             //    {
             //        UserId = new Guid("ba9a2ff3-b87e-4b18-adfc-aea8d7be538b"),
@@ -86,30 +64,7 @@ namespace GraduationProject.Infrastructure.Database.Configuration
             //        Salt = new byte[] { (byte)4, (byte)3, (byte)2 },
             //        Role = "Admin",
             //        CreationDateTime = DateTime.Now,
-            //        UserInformation = new UserInformation
-            //        {
-            //            UserInformationId = new Guid("24268096-3e58-4076-9ada-b9c7fc13baf7"),
-            //            FirstName = "Dohn",
-            //            LastName = "Joe",
-            //            PersonalCode = 12345678912,
-            //            PhoneNumber = "112",
-            //            EmailAddress = "dohn@joe.com",
-            //            FileName = "pic02.jpg",
-            //            FileData = new byte[] { (byte)4, (byte)3, (byte)2 },
-            //            UserId = new Guid("ba9a2ff3-b87e-4b18-adfc-aea8d7be538b"),
-            //            UserResidences = new List<UserResidence>()
-            //            {
-            //                new UserResidence
-            //                {
-            //                    UserInformationId = new Guid("1cde07c2-9f98-48cf-aea7-d3c8cfab2607"),
-            //                    City = "Old York",
-            //                    Street = "New road",
-            //                    HouseNumber = "33",
-            //                    ApartmentNumber = "99",
-            //                    UserResidenceId = new Guid("24268096-3e58-4076-9ada-b9c7fc13baf7"),
-            //                }
-            //            }
-            //        }
+            //        InformationId = new Guid("ec760583-0fd1-42b1-a212-65378a465c7d"),
             //    }
             //);
         }

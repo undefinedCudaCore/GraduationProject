@@ -1,5 +1,7 @@
 
 using GraduationProject.Infrastructure.Database;
+using GraduationProject.Infrastructure.Interfaces.IServices.IRepositories;
+using GraduationProject.Infrastructure.Services.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace GraduationProject
@@ -23,6 +25,8 @@ namespace GraduationProject
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddScoped<IUserInformationRepository, UserInformationRepository>();
 
             var app = builder.Build();
 

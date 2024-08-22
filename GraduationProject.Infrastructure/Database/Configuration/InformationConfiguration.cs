@@ -50,6 +50,34 @@ namespace GraduationProject.Infrastructure.Database.Configuration
 
             builder.Property(ui => ui.CreationDateTime)
             .IsRequired();
+
+
+            //Seed data
+            //builder.HasData(
+            //    new Information
+            //    {
+            //        InformationId = new Guid("40ad82b2-758e-4a4c-91ba-b50720a7f6b2"),
+            //        FirstName = "John",
+            //        LastName = "Doe",
+            //        PersonalCode = 12345678912,
+            //        PhoneNumber = "112",
+            //        EmailAddress = "john@doe.com",
+            //        FileName = "pic01.jpg",
+            //        FileData = new byte[] { (byte)4, (byte)3, (byte)2 },
+            //    }
+            //    ,
+            //    new Information
+            //    {
+            //        InformationId = new Guid("ec760583-0fd1-42b1-a212-65378a465c7d"),
+            //        FirstName = "Dohn",
+            //        LastName = "Joe",
+            //        PersonalCode = 12345678912,
+            //        PhoneNumber = "112",
+            //        EmailAddress = "dohn@joe.com",
+            //        FileName = "pic02.jpg",
+            //        FileData = new byte[] { (byte)4, (byte)3, (byte)2 },
+            //    }
+            //);
         }
     }
 }

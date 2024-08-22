@@ -1,0 +1,88 @@
+﻿using GraduationProject.Domain.Models;
+using GraduationProject.Dto;
+using GraduationProject.Infrastructure.Interfaces.IServices.IRepositories;
+using GraduationProject.Utilities;
+using Microsoft.AspNetCore.Mvc;
+
+namespace GraduationProject.Controllers
+{
+    [Route("api/user_information")]
+    public class InformationController : ControllerBase
+    {
+        private readonly IUserInformationRepository _userInformationRepository;
+        private readonly IWebHostEnvironment _environment;
+        private readonly ILogger<InformationController> _logger;
+
+        public InformationController(IUserInformationRepository userRepository, IWebHostEnvironment environment, ILogger<InformationController> logger)
+        {
+            _userInformationRepository = userRepository;
+            _environment = environment;
+            _logger = logger;
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<Information>> GetInformations()
+        {
+            var userInformations = await _userInformationRepository.GetUserInformationsAsync();
+
+            if (userInformations.Count < 5)
+            {
+                _logger.LogWarning("There are less than 5 users in teh database");
+                _logger.LogInformation("Returning {0} users ", userInformations.Count);
+            }
+
+            return userInformations;
+        }
+
+        [HttpPost]
+        public async Task CreateUserInformation([FromForm] CreateUserInformationDto request)
+        {
+            if (string.IsNullOrEmpty(request.FirstName)
+                || string.IsNullOrEmpty(request.LastName)
+                || string.IsNullOrEmpty(request.PhoneNumber)
+                || string.IsNullOrEmpty(request.EmailAddress))
+            {
+                _logger.LogError("Username or smth is missing");
+            }
+            var uploadFolderPath = Path.Combine(_environment.WebRootPath, "uploads");
+
+            if (!Directory.Exists(uploadFolderPath))
+            {
+                Directory.CreateDirectory(uploadFolderPath);
+            }
+
+            var filePath = Path.Combine(uploadFolderPath, request.Image.FileName);
+
+            using var stream = new FileStream(filePath, FileMode.Create);
+
+            await request.Image.CopyToAsync(stream);
+
+            var userInformation = new Information
+            {
+                InformationId = Guid.NewGuid(),
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                PersonalCode = request.PersonalCode,
+                PhoneNumber = request.PhoneNumber,
+                EmailAddress = request.EmailAddress,
+                FileName = request.Image?.FileName,
+                FileData = await FileUtils.ConvertToByteArray(request.Image),
+            };
+
+            await _userInformationRepository.AddUserInformationAsync(userInformation);
+        }
+
+        [HttpGet("DownloadImage")]
+        public async Task<IActionResult> DownloadUserAvatar([FromQuery] Guid id)
+        {
+            var userInformation = await _userInformationRepository.GetUserInformationByIdAsync(id);
+
+            if (userInformation == null)
+            {
+                return NotFound();
+            }
+
+            return File(userInformation.FileData, "image/jpeg", userInformation.FileName);
+        }
+    }
+}
