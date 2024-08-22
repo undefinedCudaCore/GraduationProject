@@ -2,6 +2,8 @@
 using GraduationProject.Infrastructure.Database;
 using GraduationProject.Infrastructure.Interfaces.IServices.IRepositories;
 using GraduationProject.Infrastructure.Services.Repositories;
+using GraduationProject.Services;
+using GraduationProject.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace GraduationProject
@@ -27,6 +29,9 @@ namespace GraduationProject
             });
 
             builder.Services.AddScoped<IUserInformationRepository, UserInformationRepository>();
+
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
             var app = builder.Build();
 
