@@ -2,14 +2,12 @@
 using GraduationProject.Dto;
 using GraduationProject.Infrastructure.Interfaces.IServices.IRepositories;
 using GraduationProject.Utilities;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GraduationProject.Controllers
 {
     [Route("api/user_information")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "0ad9ab6d-d7dd-4089-9b60-052e603889a7")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "0ad9ab6d-d7dd-4089-9b60-052e603889a7")]
     public class InformationController : ControllerBase
     {
         private readonly IUserInformationRepository _userInformationRepository;

@@ -2,6 +2,23 @@
 {
     public class Information
     {
+        public Information()
+        {
+        }
+
+        public Information(Guid informationId, string firstName, string lastName, long personalCode, string phoneNumber, string emailAddress, string? fileName, byte[]? fileData, IList<Residence> residences)
+        {
+            InformationId = informationId;
+            FirstName = firstName;
+            LastName = lastName;
+            PersonalCode = personalCode;
+            PhoneNumber = phoneNumber;
+            EmailAddress = emailAddress;
+            FileName = fileName;
+            FileData = fileData;
+            Residences = residences;
+        }
+
         public Guid InformationId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

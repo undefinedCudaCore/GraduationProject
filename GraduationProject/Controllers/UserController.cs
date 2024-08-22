@@ -14,18 +14,18 @@ namespace GraduationProject.Controllers
             _userService = accountService;
             _jwtService = jwtService;
         }
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public ActionResult Register(string username, string password, string role)
         {
             _userService.Register(username, password, role);
 
             return Ok();
         }
-        [HttpGet("Login")]
-        public ActionResult Login(string username, string password, string role)
+        [HttpGet("login")]
+        public ActionResult Login(string username, string password)
         {
 
-            if (_userService.Login(username, password, role))
+            if (_userService.Login(username, password))
             {
                 return Ok(_jwtService.GenerateToken(username));
             }

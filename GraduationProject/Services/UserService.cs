@@ -20,7 +20,7 @@ namespace GraduationProject.Services
         public void Register(string username, string password, string role)
         {
 
-            if (String.IsNullOrEmpty(role) || role.Trim() != "BestTeam")
+            if (String.IsNullOrEmpty(role) || role.Trim() != "TheEnd")
             {
                 role = "User";
             }
@@ -33,10 +33,13 @@ namespace GraduationProject.Services
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
             User account = new User
             {
+                UserId = Guid.NewGuid(),
                 Username = username,
                 Password = passwordHash,
-                Salt = passwordSalt
+                Salt = passwordSalt,
+                Role = role
             };
+
             _userRepository.Add(account);
 
         }
