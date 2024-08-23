@@ -1,7 +1,7 @@
 ﻿using GraduationProject.Domain.Models;
 using GraduationProject.Dto;
 using GraduationProject.Infrastructure.Interfaces.IServices.IRepositories;
-using GraduationProject.Utilities;
+using GraduationProject.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,31 +13,25 @@ namespace GraduationProject.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "0ad9ab6d-d7dd-4089-9b60-052e603889a7, User")]
     public class InformationController : ControllerBase
     {
+        private readonly IInformationService _informationService;
         private readonly IUserInformationRepository _userInformationRepository;
         private readonly IUserRepository _userRepository;
         private readonly IWebHostEnvironment _environment;
         private readonly ILogger<InformationController> _logger;
 
-        public InformationController(IUserInformationRepository userInformationRepository, IWebHostEnvironment environment, ILogger<InformationController> logger, IUserRepository userRepository)
+        public InformationController(IUserInformationRepository userInformationRepository, IWebHostEnvironment environment, ILogger<InformationController> logger, IUserRepository userRepository, IInformationService informationService)
         {
             _userInformationRepository = userInformationRepository;
             _environment = environment;
             _logger = logger;
             _userRepository = userRepository;
+            _informationService = informationService;
         }
 
         [HttpGet("get_info_from_all_users")]
         public async Task<IEnumerable<Information>> GetInformationsAsync()
         {
-            var userInformations = await _userInformationRepository.GetUserInformationsAsync();
-
-            if (userInformations.Count < 1)
-            {
-                _logger.LogWarning("There are no users in database");
-                _logger.LogInformation("Returning {0} users ", userInformations.Count);
-            }
-
-            return userInformations;
+            return await _informationService.GetAllInformationsAsync();
         }
 
         [HttpPost("add_user_information")]
@@ -54,43 +48,11 @@ namespace GraduationProject.Controllers
                 _logger.LogError("Some user input information is missing");
                 return;
             }
-            var uploadFolderPath = Path.Combine(_environment.WebRootPath, "uploads");
-
-            if (!Directory.Exists(uploadFolderPath))
-            {
-                Directory.CreateDirectory(uploadFolderPath);
-            }
-
-            var filePath = Path.Combine(uploadFolderPath, request.Image.FileName);
-
-            using var stream = new FileStream(filePath, FileMode.Create);
-
-            await request.Image.CopyToAsync(stream);
-
-            var userInformation = new Information
-            {
-                InformationId = Guid.NewGuid(),
-                FirstName = request.FirstName.Trim(),
-                LastName = request.LastName.Trim(),
-                PersonalCode = request.PersonalCode,
-                PhoneNumber = request.PhoneNumber.Trim(),
-                EmailAddress = request.EmailAddress.Trim(),
-                FileName = request.Image?.FileName,
-                FileData = await FileUtils.ConvertToByteArray(request.Image),
-                UserId = _userRepository.GetUserId(user),
-            };
-
-            var currUser = _userRepository.Get(user);
-            if (currUser != null)
-            {
-                currUser.InformationId = userInformation.InformationId;
-            }
-
-            await _userInformationRepository.AddUserInformationAsync(userInformation);
+            using FileStream stream = await _informationService.AddUserInformationAsync(request, user);
         }
 
-        [HttpGet("download_image")]
-        public async Task<IActionResult> DownloadUserAvatarAsync([FromQuery] Guid id)
+        [HttpGet("download_image_by_user_id/{id:Guid}")]
+        public async Task<IActionResult> DownloadUserAvatarAsync(Guid id)
         {
             var userInformation = await _userInformationRepository.GetUserInformationByUserIdAsync(id);
 
@@ -100,6 +62,12 @@ namespace GraduationProject.Controllers
             }
 
             return File(userInformation.FileData, "image/jpeg", userInformation.FileName);
+        }
+
+        [HttpGet("get_user_information_by_user_id/{id:Guid}")]
+        public async Task<Information?> GetInformationByUserIdAsync(Guid id)
+        {
+            return await _informationService.GetOneUserInformationByUserIdAsync(id);
         }
     }
 }

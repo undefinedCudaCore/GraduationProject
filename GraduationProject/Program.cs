@@ -86,6 +86,7 @@ namespace GraduationProject
             });
 
             builder.Services.AddScoped<IUserInformationRepository, UserInformationRepository>();
+            builder.Services.AddScoped<IInformationService, InformationService>();
 
             builder.Services.AddScoped<IUserResidenceRepository, UserResidenceRepository>();
             builder.Services.AddScoped<IResidenceService, ResidenceService>();

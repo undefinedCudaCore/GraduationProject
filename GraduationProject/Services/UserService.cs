@@ -48,8 +48,8 @@ namespace GraduationProject.Services
             };
 
             _userRepository.Add(account);
-
         }
+
         public bool Login(string username, string password, out string role)
         {
             var acc = _userRepository.Get(username);
@@ -83,5 +83,4 @@ namespace GraduationProject.Services
             passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
         }
     }
-
 }
