@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GraduationProject.Infrastructure.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20240821182853_InitialMigration")]
+    [Migration("20240822161750_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -65,7 +65,13 @@ namespace GraduationProject.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("InformationId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("information", (string)null);
                 });
@@ -99,6 +105,8 @@ namespace GraduationProject.Infrastructure.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("ResidenceId");
+
+                    b.HasIndex("InformationId");
 
                     b.ToTable("residence", (string)null);
                 });
@@ -135,29 +143,27 @@ namespace GraduationProject.Infrastructure.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("InformationId");
-
                     b.HasIndex("Username")
                         .IsUnique();
 
                     b.ToTable("users", (string)null);
                 });
 
+            modelBuilder.Entity("GraduationProject.Domain.Models.Information", b =>
+                {
+                    b.HasOne("GraduationProject.Domain.Models.User", "User")
+                        .WithOne("Information")
+                        .HasForeignKey("GraduationProject.Domain.Models.Information", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("GraduationProject.Domain.Models.Residence", b =>
                 {
                     b.HasOne("GraduationProject.Domain.Models.Information", "Information")
                         .WithMany("Residences")
-                        .HasForeignKey("ResidenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Information");
-                });
-
-            modelBuilder.Entity("GraduationProject.Domain.Models.User", b =>
-                {
-                    b.HasOne("GraduationProject.Domain.Models.Information", "Information")
-                        .WithMany()
                         .HasForeignKey("InformationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -168,6 +174,11 @@ namespace GraduationProject.Infrastructure.Migrations
             modelBuilder.Entity("GraduationProject.Domain.Models.Information", b =>
                 {
                     b.Navigation("Residences");
+                });
+
+            modelBuilder.Entity("GraduationProject.Domain.Models.User", b =>
+                {
+                    b.Navigation("Information");
                 });
 #pragma warning restore 612, 618
         }

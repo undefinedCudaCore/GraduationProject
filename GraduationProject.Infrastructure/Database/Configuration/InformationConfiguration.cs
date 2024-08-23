@@ -18,9 +18,10 @@ namespace GraduationProject.Infrastructure.Database.Configuration
                 .IsRequired()
                 .ValueGeneratedNever();
 
-            builder.HasMany(s => s.Residences)
-                .WithOne(s => s.Information)
-                .HasForeignKey(s => s.ResidenceId);
+            builder.HasOne(ui => ui.User)
+                .WithOne(ui => ui.Information)
+                .HasForeignKey<Information>(ui => ui.InformationId)
+                .IsRequired();
 
             builder.Property(ui => ui.FirstName)
                 .IsRequired()

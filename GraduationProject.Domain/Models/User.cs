@@ -9,6 +9,6 @@
         public string Role { get; set; }
         public DateTime CreationDateTime { get; set; } = DateTime.UtcNow;
         public Guid InformationId { get; set; }
-        public Information Information { get; set; }
+        public Information? Information { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using GraduationProject.Dto;
 using GraduationProject.Infrastructure.Interfaces.IServices.IRepositories;
 using GraduationProject.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace GraduationProject.Controllers
 {
@@ -11,18 +12,20 @@ namespace GraduationProject.Controllers
     public class InformationController : ControllerBase
     {
         private readonly IUserInformationRepository _userInformationRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IWebHostEnvironment _environment;
         private readonly ILogger<InformationController> _logger;
 
-        public InformationController(IUserInformationRepository userRepository, IWebHostEnvironment environment, ILogger<InformationController> logger)
+        public InformationController(IUserInformationRepository userInformationRepository, IWebHostEnvironment environment, ILogger<InformationController> logger, IUserRepository userRepository)
         {
-            _userInformationRepository = userRepository;
+            _userInformationRepository = userInformationRepository;
             _environment = environment;
             _logger = logger;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Information>> GetInformations()
+        public async Task<IEnumerable<Information>> GetInformationsAsync()
         {
             var userInformations = await _userInformationRepository.GetUserInformationsAsync();
 
@@ -38,12 +41,11 @@ namespace GraduationProject.Controllers
         [HttpPost]
         public async Task CreateUserInformation([FromForm] CreateUserInformationDto request)
         {
-            if (string.IsNullOrEmpty(request.FirstName)
-                || string.IsNullOrEmpty(request.LastName)
-                || string.IsNullOrEmpty(request.PhoneNumber)
-                || string.IsNullOrEmpty(request.EmailAddress))
+            var UserId = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            if (string.IsNullOrEmpty(request.FirstName) || string.IsNullOrEmpty(request.FirstName) || string.IsNullOrEmpty(request.EmailAddress))
             {
-                _logger.LogError("Username or smth is missing");
+                _logger.LogError("Username or email is missing");
             }
             var uploadFolderPath = Path.Combine(_environment.WebRootPath, "uploads");
 
@@ -68,13 +70,20 @@ namespace GraduationProject.Controllers
                 EmailAddress = request.EmailAddress,
                 FileName = request.Image?.FileName,
                 FileData = await FileUtils.ConvertToByteArray(request.Image),
+                UserId = _userRepository.GetUserId(UserId),
             };
+
+            var currUser = _userRepository.Get(UserId);
+            if (currUser != null)
+            {
+                currUser.InformationId = userInformation.InformationId;
+            }
 
             await _userInformationRepository.AddUserInformationAsync(userInformation);
         }
 
-        [HttpGet("DownloadImage")]
-        public async Task<IActionResult> DownloadUserAvatar([FromQuery] Guid id)
+        [HttpGet("download_image")]
+        public async Task<IActionResult> DownloadUserAvatarAsync([FromQuery] Guid id)
         {
             var userInformation = await _userInformationRepository.GetUserInformationByIdAsync(id);
 

@@ -23,5 +23,9 @@ namespace GraduationProject.Infrastructure.Services.Repositories
             return _dbContext.Users.FirstOrDefault(x => x.Username == username);
         }
 
+        public Guid GetUserId(string username)
+        {
+            return _dbContext.Users.FirstOrDefault(x => x.Username == username).UserId;
+        }
     }
 }
