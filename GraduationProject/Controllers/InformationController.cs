@@ -2,13 +2,15 @@
 using GraduationProject.Dto;
 using GraduationProject.Infrastructure.Interfaces.IServices.IRepositories;
 using GraduationProject.Utilities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace GraduationProject.Controllers
 {
     [Route("api/user_information")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "0ad9ab6d-d7dd-4089-9b60-052e603889a7")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "0ad9ab6d-d7dd-4089-9b60-052e603889a7, User")]
     public class InformationController : ControllerBase
     {
         private readonly IUserInformationRepository _userInformationRepository;
@@ -24,28 +26,33 @@ namespace GraduationProject.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet]
+        [HttpGet("get_info_from_all_users")]
         public async Task<IEnumerable<Information>> GetInformationsAsync()
         {
             var userInformations = await _userInformationRepository.GetUserInformationsAsync();
 
-            if (userInformations.Count < 5)
+            if (userInformations.Count < 1)
             {
-                _logger.LogWarning("There are less than 5 users in teh database");
+                _logger.LogWarning("There are no users in database");
                 _logger.LogInformation("Returning {0} users ", userInformations.Count);
             }
 
             return userInformations;
         }
 
-        [HttpPost]
-        public async Task CreateUserInformation([FromForm] CreateUserInformationDto request)
+        [HttpPost("add_user_information")]
+        public async Task CreateUserInformationAsync([FromForm] CreateUserInformationDto request)
         {
             var UserId = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
 
-            if (string.IsNullOrEmpty(request.FirstName) || string.IsNullOrEmpty(request.FirstName) || string.IsNullOrEmpty(request.EmailAddress))
+            if (string.IsNullOrEmpty(request.FirstName)
+                || string.IsNullOrEmpty(request.LastName)
+                || string.IsNullOrEmpty(request.PhoneNumber)
+                || request.FirstName.Length == 0
+                || string.IsNullOrEmpty(request.EmailAddress))
             {
-                _logger.LogError("Username or email is missing");
+                _logger.LogError("Some user input information is missing");
+                return;
             }
             var uploadFolderPath = Path.Combine(_environment.WebRootPath, "uploads");
 
@@ -63,11 +70,11 @@ namespace GraduationProject.Controllers
             var userInformation = new Information
             {
                 InformationId = Guid.NewGuid(),
-                FirstName = request.FirstName,
-                LastName = request.LastName,
+                FirstName = request.FirstName.Trim(),
+                LastName = request.LastName.Trim(),
                 PersonalCode = request.PersonalCode,
-                PhoneNumber = request.PhoneNumber,
-                EmailAddress = request.EmailAddress,
+                PhoneNumber = request.PhoneNumber.Trim(),
+                EmailAddress = request.EmailAddress.Trim(),
                 FileName = request.Image?.FileName,
                 FileData = await FileUtils.ConvertToByteArray(request.Image),
                 UserId = _userRepository.GetUserId(UserId),
@@ -85,7 +92,7 @@ namespace GraduationProject.Controllers
         [HttpGet("download_image")]
         public async Task<IActionResult> DownloadUserAvatarAsync([FromQuery] Guid id)
         {
-            var userInformation = await _userInformationRepository.GetUserInformationByIdAsync(id);
+            var userInformation = await _userInformationRepository.GetUserInformationByUserIdAsync(id);
 
             if (userInformation == null)
             {

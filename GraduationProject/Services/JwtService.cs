@@ -15,7 +15,7 @@ namespace GraduationProject.Services
             _configuration = configuration;
         }
 
-        public string GenerateToken(string username)
+        public string GenerateToken(string username, string role)
         {
             var key = _configuration["Jwt:Key"];
             var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
@@ -25,6 +25,7 @@ namespace GraduationProject.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, role),
             };
 
             var jwt = new JwtSecurityToken(
@@ -37,7 +38,6 @@ namespace GraduationProject.Services
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
-
     }
 
 }

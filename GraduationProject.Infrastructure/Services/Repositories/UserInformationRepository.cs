@@ -19,7 +19,7 @@ namespace GraduationProject.Infrastructure.Services.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Information?> GetUserInformationByIdAsync(Guid id)
+        public async Task<Information?> GetUserInformationByUserIdAsync(Guid id)
         {
             return await _dbContext.Informations.FirstOrDefaultAsync(x => x.UserId == id);
         }
