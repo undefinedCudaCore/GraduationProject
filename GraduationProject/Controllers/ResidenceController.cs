@@ -1,5 +1,5 @@
 ﻿using GraduationProject.Domain.Models;
-using GraduationProject.Infrastructure.Interfaces.IServices.IRepositories;
+using GraduationProject.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,26 +10,23 @@ namespace GraduationProject.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "0ad9ab6d-d7dd-4089-9b60-052e603889a7, User")]
     public class ResidenceController : ControllerBase
     {
-        private readonly IUserResidenceRepository _userResidenceRepository;
-        private readonly ILogger<InformationController> _logger;
-        public ResidenceController(IUserResidenceRepository userResidenceRepository, ILogger<InformationController> logger)
+        private readonly IResidenceService _residenceService;
+        public ResidenceController(IResidenceService residenceService)
         {
-            _userResidenceRepository = userResidenceRepository;
-            _logger = logger;
+
+            _residenceService = residenceService;
         }
 
         [HttpGet("get_residence_from_all_user_informations")]
-        public async Task<IEnumerable<Residence>> GetInformationsAsync()
+        public async Task<IEnumerable<Residence>> GetResidencesAsync()
         {
-            var userResidence = await _userResidenceRepository.GetUserResidencesAsync();
+            return await _residenceService.GetAllResidencesAsync();
+        }
 
-            if (userResidence.Count < 2)
-            {
-                _logger.LogWarning("There are no user residence information in database");
-                _logger.LogInformation("Returning {0} users ", userResidence.Count);
-            }
-
-            return userResidence;
+        [HttpGet("{id:Guid}", Name = "get_residence_by_information_id")]
+        public async Task<Residence?> GetResidenceByInformationIdAsync(Guid id)
+        {
+            return await _residenceService.GetResidenceByIdAsync(id);
         }
     }
 }
