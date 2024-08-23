@@ -1,6 +1,7 @@
 ﻿using GraduationProject.Domain.Models;
 using GraduationProject.Infrastructure.Database;
 using GraduationProject.Infrastructure.Interfaces.IServices.IRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace GraduationProject.Infrastructure.Services.Repositories
 {
@@ -21,6 +22,10 @@ namespace GraduationProject.Infrastructure.Services.Repositories
         public User Get(string username)
         {
             return _dbContext.Users.FirstOrDefault(x => x.Username == username);
+        }
+        public async Task<IEnumerable<User>> GetAllAsync()
+        {
+            return await _dbContext.Users.ToListAsync();
         }
 
         public Guid GetUserId(string username)

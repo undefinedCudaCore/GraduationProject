@@ -25,7 +25,7 @@ namespace GraduationProject.Controllers
             return await _residenceService.GetAllResidencesAsync();
         }
 
-        [HttpGet("{id:Guid}", Name = "get_residence_by_information_id")]
+        [HttpGet("get_residence_by_information_id/{id:Guid}")]
         public async Task<Residence?> GetResidenceByInformationIdAsync(Guid id)
         {
             return await _residenceService.GetResidenceByIdAsync(id);

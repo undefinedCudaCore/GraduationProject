@@ -17,6 +17,13 @@ namespace GraduationProject.Services
             _configuration = configuration;
         }
 
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        {
+            var users = await _userRepository.GetAllAsync();
+
+            return users;
+        }
+
         public void Register(string username, string password, string role)
         {
 
