@@ -48,7 +48,7 @@ namespace GraduationProject.Controllers
                 _logger.LogError("Some user input information is missing");
                 return;
             }
-            using FileStream stream = await _informationService.AddUserInformationAsync(request, user);
+            await _informationService.AddUserInformationAsync(request, user);
         }
 
         [HttpGet("download_image_by_user_id/{id:Guid}")]

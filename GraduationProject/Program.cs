@@ -94,6 +94,8 @@ namespace GraduationProject
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
 
+            builder.Services.AddScoped<IImageEditionService, ImageEditionService>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

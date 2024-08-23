@@ -3,7 +3,6 @@ using GraduationProject.Domain.Models;
 using GraduationProject.Dto;
 using GraduationProject.Infrastructure.Interfaces.IServices.IRepositories;
 using GraduationProject.Services.Interfaces;
-using GraduationProject.Utilities;
 
 namespace GraduationProject.Services
 {
@@ -13,13 +12,15 @@ namespace GraduationProject.Services
         private readonly IUserRepository _userRepository;
         private readonly IWebHostEnvironment _environment;
         private readonly ILogger<InformationController> _logger;
+        private readonly IImageEditionService _imageEditionService;
 
-        public InformationService(IUserInformationRepository userInformationRepository, IWebHostEnvironment environment, ILogger<InformationController> logger, IUserRepository userRepository)
+        public InformationService(IUserInformationRepository userInformationRepository, IWebHostEnvironment environment, ILogger<InformationController> logger, IUserRepository userRepository, IImageEditionService imageEditionService)
         {
             _userInformationRepository = userInformationRepository;
             _environment = environment;
             _logger = logger;
             _userRepository = userRepository;
+            _imageEditionService = imageEditionService;
         }
 
         public async Task<IEnumerable<Information>> GetAllInformationsAsync()
@@ -35,7 +36,7 @@ namespace GraduationProject.Services
             return userInformations;
         }
 
-        public async Task<FileStream> AddUserInformationAsync(CreateUserInformationDto request, string user)
+        public async Task AddUserInformationAsync(CreateUserInformationDto request, string user)
         {
             var uploadFolderPath = Path.Combine(_environment.WebRootPath, "uploads");
 
@@ -44,10 +45,13 @@ namespace GraduationProject.Services
                 Directory.CreateDirectory(uploadFolderPath);
             }
 
-            var filePath = Path.Combine(uploadFolderPath, request.Image.FileName);
-            var stream = new FileStream(filePath, FileMode.Create);
+            //var filePath = Path.Combine(uploadFolderPath, request.Image.FileName);
+            //var stream = new FileStream(filePath, FileMode.Create);
 
-            await request.Image.CopyToAsync(stream);
+            //await request.Image.CopyToAsync(stream);
+
+            UserImageDto image = new UserImageDto { Image = request.Image };
+            var imageBytes = await _imageEditionService.ResizeImageAsync(image);
 
             var userInformation = new Information
             {
@@ -58,7 +62,8 @@ namespace GraduationProject.Services
                 PhoneNumber = request.PhoneNumber.Trim(),
                 EmailAddress = request.EmailAddress.Trim(),
                 FileName = request.Image?.FileName,
-                FileData = await FileUtils.ConvertToByteArray(request.Image),
+                FileData = imageBytes,
+                //FileData = await FileUtils.ConvertToByteArray(request.Image),
                 UserId = _userRepository.GetUserId(user),
             };
 
@@ -69,7 +74,7 @@ namespace GraduationProject.Services
             }
 
             await _userInformationRepository.AddUserInformationAsync(userInformation);
-            return stream;
+            //return stream;
         }
 
         public async Task<Information?> GetOneUserInformationByUserIdAsync(Guid id)

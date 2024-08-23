@@ -11,7 +11,7 @@ namespace GraduationProject.Dto
         public string EmailAddress { get; set; }
 
         [MaxFileSize(15 * 1024 * 1024)] //15MB
-        [AllowedExtrention([".jpeg", ".jpg", ".png"])]
+        [AllowedExtension([".jpeg", ".jpg", ".png"])]
         public IFormFile Image { get; set; }
     }
 }

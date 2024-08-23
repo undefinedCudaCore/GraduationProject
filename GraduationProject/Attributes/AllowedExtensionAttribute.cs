@@ -2,10 +2,10 @@
 
 namespace GraduationProject.Atributes
 {
-    public class AllowedExtrentionAttribute : ValidationAttribute
+    public class AllowedExtensionAttribute : ValidationAttribute
     {
         private readonly string[] _extentions;
-        public AllowedExtrentionAttribute(string[] extentions)
+        public AllowedExtensionAttribute(string[] extentions)
         {
             _extentions = extentions;
         }
