@@ -28,5 +28,9 @@ namespace GraduationProject.Infrastructure.Services.Repositories
         {
             return await _dbContext.Informations.ToListAsync();
         }
+        public Information Get(Guid id)
+        {
+            return _dbContext.Informations.FirstOrDefault(x => x.InformationId == id);
+        }
     }
 }

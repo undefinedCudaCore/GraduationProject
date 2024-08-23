@@ -1,8 +1,10 @@
 ﻿using GraduationProject.Domain.Models;
+using GraduationProject.Dto;
 using GraduationProject.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace GraduationProject.Controllers
 {
@@ -27,6 +29,14 @@ namespace GraduationProject.Controllers
         public async Task<Residence?> GetResidenceByInformationIdAsync(Guid id)
         {
             return await _residenceService.GetResidenceByIdAsync(id);
+        }
+
+        [HttpPost("create_new_user_residence")]
+        public async Task AddResidenceAsync([FromForm] CreateUserResidenceDto request)
+        {
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            await _residenceService.AddUserResidenceAsync(request, user);
         }
     }
 }

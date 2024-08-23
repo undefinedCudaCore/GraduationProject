@@ -43,7 +43,7 @@ namespace GraduationProject.Controllers
         [HttpPost("add_user_information")]
         public async Task CreateUserInformationAsync([FromForm] CreateUserInformationDto request)
         {
-            var UserId = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
 
             if (string.IsNullOrEmpty(request.FirstName)
                 || string.IsNullOrEmpty(request.LastName)
@@ -77,10 +77,10 @@ namespace GraduationProject.Controllers
                 EmailAddress = request.EmailAddress.Trim(),
                 FileName = request.Image?.FileName,
                 FileData = await FileUtils.ConvertToByteArray(request.Image),
-                UserId = _userRepository.GetUserId(UserId),
+                UserId = _userRepository.GetUserId(user),
             };
 
-            var currUser = _userRepository.Get(UserId);
+            var currUser = _userRepository.Get(user);
             if (currUser != null)
             {
                 currUser.InformationId = userInformation.InformationId;
