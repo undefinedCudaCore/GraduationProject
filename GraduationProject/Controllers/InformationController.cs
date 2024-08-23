@@ -26,28 +26,33 @@ namespace GraduationProject.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpGet]
+        [HttpGet("get_info_from_all_users")]
         public async Task<IEnumerable<Information>> GetInformationsAsync()
         {
             var userInformations = await _userInformationRepository.GetUserInformationsAsync();
 
-            if (userInformations.Count < 5)
+            if (userInformations.Count < 1)
             {
-                _logger.LogWarning("There are less than 5 users in teh database");
+                _logger.LogWarning("There are no users in database");
                 _logger.LogInformation("Returning {0} users ", userInformations.Count);
             }
 
             return userInformations;
         }
 
-        [HttpPost]
+        [HttpPost("add_user_information")]
         public async Task CreateUserInformationAsync([FromForm] CreateUserInformationDto request)
         {
             var UserId = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
 
-            if (string.IsNullOrEmpty(request.FirstName) || string.IsNullOrEmpty(request.FirstName) || string.IsNullOrEmpty(request.EmailAddress))
+            if (string.IsNullOrEmpty(request.FirstName)
+                || string.IsNullOrEmpty(request.LastName)
+                || string.IsNullOrEmpty(request.PhoneNumber)
+                || request.FirstName.Length == 0
+                || string.IsNullOrEmpty(request.EmailAddress))
             {
-                _logger.LogError("Username or email is missing");
+                _logger.LogError("Some user input information is missing");
+                return;
             }
             var uploadFolderPath = Path.Combine(_environment.WebRootPath, "uploads");
 
@@ -87,7 +92,7 @@ namespace GraduationProject.Controllers
         [HttpGet("download_image")]
         public async Task<IActionResult> DownloadUserAvatarAsync([FromQuery] Guid id)
         {
-            var userInformation = await _userInformationRepository.GetUserInformationByIdAsync(id);
+            var userInformation = await _userInformationRepository.GetUserInformationByUserIdAsync(id);
 
             if (userInformation == null)
             {
