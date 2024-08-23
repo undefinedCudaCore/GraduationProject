@@ -2,13 +2,15 @@
 using GraduationProject.Dto;
 using GraduationProject.Infrastructure.Interfaces.IServices.IRepositories;
 using GraduationProject.Utilities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace GraduationProject.Controllers
 {
     [Route("api/user_information")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "0ad9ab6d-d7dd-4089-9b60-052e603889a7")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "0ad9ab6d-d7dd-4089-9b60-052e603889a7, User")]
     public class InformationController : ControllerBase
     {
         private readonly IUserInformationRepository _userInformationRepository;
@@ -39,7 +41,7 @@ namespace GraduationProject.Controllers
         }
 
         [HttpPost]
-        public async Task CreateUserInformation([FromForm] CreateUserInformationDto request)
+        public async Task CreateUserInformationAsync([FromForm] CreateUserInformationDto request)
         {
             var UserId = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
 
@@ -63,11 +65,11 @@ namespace GraduationProject.Controllers
             var userInformation = new Information
             {
                 InformationId = Guid.NewGuid(),
-                FirstName = request.FirstName,
-                LastName = request.LastName,
+                FirstName = request.FirstName.Trim(),
+                LastName = request.LastName.Trim(),
                 PersonalCode = request.PersonalCode,
-                PhoneNumber = request.PhoneNumber,
-                EmailAddress = request.EmailAddress,
+                PhoneNumber = request.PhoneNumber.Trim(),
+                EmailAddress = request.EmailAddress.Trim(),
                 FileName = request.Image?.FileName,
                 FileData = await FileUtils.ConvertToByteArray(request.Image),
                 UserId = _userRepository.GetUserId(UserId),

@@ -25,9 +25,9 @@ namespace GraduationProject.Controllers
         public ActionResult Login(string username, string password)
         {
 
-            if (_userService.Login(username, password))
+            if (_userService.Login(username, password, out string role))
             {
-                return Ok(_jwtService.GenerateToken(username));
+                return Ok(_jwtService.GenerateToken(username, role));
             }
             return Unauthorized();
         }

@@ -43,9 +43,10 @@ namespace GraduationProject.Services
             _userRepository.Add(account);
 
         }
-        public bool Login(string username, string password)
+        public bool Login(string username, string password, out string role)
         {
             var acc = _userRepository.Get(username);
+            role = acc.Role;
 
             if (acc == null)
             {
