@@ -21,7 +21,7 @@ namespace GraduationProject.Infrastructure.Services.Repositories
 
         public async Task<Information?> GetUserInformationByIdAsync(Guid id)
         {
-            return await _dbContext.Informations.FirstOrDefaultAsync(x => x.InformationId == id);
+            return await _dbContext.Informations.FirstOrDefaultAsync(x => x.UserId == id);
         }
 
         public async Task<IList<Information>> GetUserInformationsAsync()

@@ -82,7 +82,7 @@ namespace GraduationProject.Controllers
             await _userInformationRepository.AddUserInformationAsync(userInformation);
         }
 
-        [HttpGet("DownloadImage")]
+        [HttpGet("download_image")]
         public async Task<IActionResult> DownloadUserAvatarAsync([FromQuery] Guid id)
         {
             var userInformation = await _userInformationRepository.GetUserInformationByIdAsync(id);
