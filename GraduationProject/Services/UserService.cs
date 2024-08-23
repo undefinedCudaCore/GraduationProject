@@ -17,6 +17,13 @@ namespace GraduationProject.Services
             _configuration = configuration;
         }
 
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        {
+            var users = await _userRepository.GetAllAsync();
+
+            return users;
+        }
+
         public void Register(string username, string password, string role)
         {
 
@@ -41,8 +48,8 @@ namespace GraduationProject.Services
             };
 
             _userRepository.Add(account);
-
         }
+
         public bool Login(string username, string password, out string role)
         {
             var acc = _userRepository.Get(username);
@@ -76,5 +83,4 @@ namespace GraduationProject.Services
             passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
         }
     }
-
 }

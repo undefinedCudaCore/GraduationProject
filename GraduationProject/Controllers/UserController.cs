@@ -1,4 +1,7 @@
-﻿using GraduationProject.Services.Interfaces;
+﻿using GraduationProject.Domain.Models;
+using GraduationProject.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GraduationProject.Controllers
@@ -9,9 +12,9 @@ namespace GraduationProject.Controllers
         private readonly IUserService _userService;
         private readonly IJwtService _jwtService;
 
-        public UserController(IUserService accountService, IJwtService jwtService)
+        public UserController(IUserService userService, IJwtService jwtService)
         {
-            _userService = accountService;
+            _userService = userService;
             _jwtService = jwtService;
         }
         [HttpPost("register")]
@@ -31,6 +34,13 @@ namespace GraduationProject.Controllers
             }
             return Unauthorized();
         }
-    }
 
+        [HttpGet("get_all_users")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "0ad9ab6d-d7dd-4089-9b60-052e603889a7")]
+        public async Task<IEnumerable<User>> GetUsersAsync()
+        {
+            return await _userService.GetAllUsersAsync();
+        }
+
+    }
 }
