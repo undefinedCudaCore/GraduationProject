@@ -18,6 +18,11 @@ namespace GraduationProject.Infrastructure.Database.Configuration
                 .IsRequired()
                 .ValueGeneratedNever();
 
+            builder.HasOne(u => u.Information)
+                .WithOne(u => u.User)
+                .HasForeignKey<Information>(u => u.UserId)
+                .IsRequired();
+
             builder.Property(u => u.Username)
                 .IsRequired()
                 .HasMaxLength(100);
@@ -36,8 +41,8 @@ namespace GraduationProject.Infrastructure.Database.Configuration
             builder.Property(u => u.CreationDateTime)
                 .IsRequired();
 
-            builder.Property(u => u.InformationId)
-                .IsRequired();
+            //builder.Property(u => u.InformationId)
+            //    .IsRequired();
 
             // Index
             builder.HasIndex(u => u.Username)

@@ -29,6 +29,9 @@
         public byte[]? FileData { get; set; }
         public DateTime CreationDateTime { get; set; } = DateTime.UtcNow;
 
+        public Guid UserId { get; set; }
+        public User User { get; set; } = null!;
+
         public IList<Residence> Residences { get; set; } = new List<Residence>();
     }
 }

@@ -6,5 +6,6 @@ namespace GraduationProject.Infrastructure.Interfaces.IServices.IRepositories
     {
         void Add(User user);
         User Get(string username);
+        public Guid GetUserId(string username);
     }
 }

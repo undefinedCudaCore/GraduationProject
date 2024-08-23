@@ -1,5 +1,4 @@
-﻿using GraduationProject.Dto;
-using GraduationProject.Services.Interfaces;
+﻿using GraduationProject.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GraduationProject.Controllers
@@ -16,7 +15,7 @@ namespace GraduationProject.Controllers
             _jwtService = jwtService;
         }
         [HttpPost("register")]
-        public ActionResult Register([FromForm] CreateUserInformationDto request, string username, string password, string role)
+        public ActionResult Register(string username, string password, string role)
         {
             _userService.Register(username, password, role);
 

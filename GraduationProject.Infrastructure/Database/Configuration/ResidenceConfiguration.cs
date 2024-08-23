@@ -18,6 +18,10 @@ namespace GraduationProject.Infrastructure.Database.Configuration
                 .IsRequired()
                 .ValueGeneratedNever();
 
+            builder.HasOne(ur => ur.Information)
+                .WithMany(ur => ur.Residences)
+                .HasForeignKey(ur => ur.InformationId);
+
             builder.Property(ur => ur.City)
                 .IsRequired()
                 .HasMaxLength(50);
