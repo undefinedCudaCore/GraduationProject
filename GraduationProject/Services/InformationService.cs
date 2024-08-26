@@ -45,11 +45,6 @@ namespace GraduationProject.Services
                 Directory.CreateDirectory(uploadFolderPath);
             }
 
-            //var filePath = Path.Combine(uploadFolderPath, request.Image.FileName);
-            //var stream = new FileStream(filePath, FileMode.Create);
-
-            //await request.Image.CopyToAsync(stream);
-
             UserImageDto image = new UserImageDto { Image = request.Image };
             var imageBytes = await _imageEditionService.ResizeImageAsync(image);
 
@@ -63,7 +58,6 @@ namespace GraduationProject.Services
                 EmailAddress = request.EmailAddress.Trim(),
                 FileName = request.Image?.FileName,
                 FileData = imageBytes,
-                //FileData = await FileUtils.ConvertToByteArray(request.Image),
                 UserId = _userRepository.GetUserId(user),
             };
 
@@ -74,7 +68,6 @@ namespace GraduationProject.Services
             }
 
             await _userInformationRepository.AddUserInformationAsync(userInformation);
-            //return stream;
         }
 
         public async Task<Information?> GetOneUserInformationByUserIdAsync(Guid id)
