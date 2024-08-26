@@ -29,5 +29,10 @@ namespace GraduationProject.Infrastructure.Services.Repositories
             return await _dbContext.Residences.ToListAsync();
         }
 
+        public async Task UpdateAsync(Residence residence)
+        {
+            _dbContext.Update(residence);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

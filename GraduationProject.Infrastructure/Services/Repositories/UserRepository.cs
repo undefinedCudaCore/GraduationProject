@@ -32,5 +32,18 @@ namespace GraduationProject.Infrastructure.Services.Repositories
         {
             return _dbContext.Users.FirstOrDefault(x => x.Username == username).UserId;
         }
+
+        public async Task RemoveUserAsync(Guid id)
+        {
+            var userToRemove = _dbContext.Users.FirstOrDefault(u => u.UserId == id);
+
+            if (userToRemove == null)
+            {
+                return;
+            }
+
+            _dbContext.Users.Remove(userToRemove);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

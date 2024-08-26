@@ -42,5 +42,13 @@ namespace GraduationProject.Controllers
             return await _userService.GetAllUsersAsync();
         }
 
+        [HttpDelete("delete_user")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "0ad9ab6d-d7dd-4089-9b60-052e603889a7")]
+        public async Task<IActionResult> DeleteUser([FromForm] Guid userId)
+        {
+            _userService.UserToRemoveAsync(userId);
+
+            return NoContent();
+        }
     }
 }

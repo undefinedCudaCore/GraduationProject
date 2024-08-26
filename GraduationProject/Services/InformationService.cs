@@ -45,13 +45,8 @@ namespace GraduationProject.Services
                 Directory.CreateDirectory(uploadFolderPath);
             }
 
-            //var filePath = Path.Combine(uploadFolderPath, request.Image.FileName);
-            //var stream = new FileStream(filePath, FileMode.Create);
-
-            //await request.Image.CopyToAsync(stream);
-
-            UserImageDto image = new UserImageDto { Image = request.Image };
-            var imageBytes = await _imageEditionService.ResizeImageAsync(image);
+            UserImageDto img = new UserImageDto { Image = request.Image };
+            var imageBytes = await _imageEditionService.ResizeImageAsync(img);
 
             var userInformation = new Information
             {
@@ -63,7 +58,6 @@ namespace GraduationProject.Services
                 EmailAddress = request.EmailAddress.Trim(),
                 FileName = request.Image?.FileName,
                 FileData = imageBytes,
-                //FileData = await FileUtils.ConvertToByteArray(request.Image),
                 UserId = _userRepository.GetUserId(user),
             };
 
@@ -74,12 +68,90 @@ namespace GraduationProject.Services
             }
 
             await _userInformationRepository.AddUserInformationAsync(userInformation);
-            //return stream;
         }
 
         public async Task<Information?> GetOneUserInformationByUserIdAsync(Guid id)
         {
             return await _userInformationRepository.GetUserInformationByUserIdAsync(id);
+        }
+        public async Task UpdateUserFirstNameAsync(Guid userId, string firstName)
+        {
+            var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
+            if (userInformation != null)
+            {
+                userInformation.FirstName = firstName;
+            }
+
+            await _userInformationRepository.UpdateAsync(userInformation);
+        }
+
+        public async Task UpdateUserLastNameAsync(Guid userId, string lastName)
+        {
+            var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
+            if (userInformation != null)
+            {
+                userInformation.LastName = lastName;
+            }
+
+            await _userInformationRepository.UpdateAsync(userInformation);
+        }
+
+        public async Task UpdateUserPersonalCodeAsync(Guid userId, long personalCode)
+        {
+            var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
+            if (userInformation != null)
+            {
+                userInformation.PersonalCode = personalCode;
+            }
+
+            await _userInformationRepository.UpdateAsync(userInformation);
+        }
+
+        public async Task UpdateUserPhoneNumberAsync(Guid userId, string phoneNumber)
+        {
+            var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
+            if (userInformation != null)
+            {
+                userInformation.PhoneNumber = phoneNumber;
+            }
+
+            await _userInformationRepository.UpdateAsync(userInformation);
+        }
+
+        public async Task UpdateUserEmailAddressAsync(Guid userId, string emailAddress)
+        {
+            var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
+            if (userInformation != null)
+            {
+                userInformation.EmailAddress = emailAddress;
+            }
+
+            await _userInformationRepository.UpdateAsync(userInformation);
+        }
+
+        public async Task UpdateUserImageAsync(Guid userId, UserImageDto image)
+        {
+            var uploadFolderPath = Path.Combine(_environment.WebRootPath, "uploads");
+
+            if (!Directory.Exists(uploadFolderPath))
+            {
+                Directory.CreateDirectory(uploadFolderPath);
+            }
+
+            var imageBytes = await _imageEditionService.ResizeImageAsync(image);
+
+            var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
+
+
+            if (userInformation != null)
+            {
+                string updatedFile = "updated_avatar.jpg";
+
+                userInformation.FileName = updatedFile;
+                userInformation.FileData = imageBytes;
+            }
+
+            await _userInformationRepository.UpdateAsync(userInformation);
         }
     }
 }

@@ -50,6 +50,11 @@ namespace GraduationProject.Services
             _userRepository.Add(account);
         }
 
+        public async void UserToRemoveAsync(Guid id)
+        {
+            _userRepository.RemoveUserAsync(id);
+        }
+
         public bool Login(string username, string password, out string role)
         {
             var acc = _userRepository.Get(username);
