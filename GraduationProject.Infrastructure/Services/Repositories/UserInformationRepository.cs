@@ -32,5 +32,11 @@ namespace GraduationProject.Infrastructure.Services.Repositories
         {
             return _dbContext.Informations.FirstOrDefault(x => x.InformationId == id);
         }
+
+        public async Task UpdateNameAsync(Information information)
+        {
+            _dbContext.Update(information);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

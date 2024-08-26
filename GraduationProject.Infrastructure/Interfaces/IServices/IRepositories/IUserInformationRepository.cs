@@ -9,5 +9,6 @@ namespace GraduationProject.Infrastructure.Interfaces.IServices.IRepositories
         public Task<IList<Information>> GetUserInformationsAsync();
         public Task<Information?> GetUserInformationByUserIdAsync(Guid id);
         public Information Get(Guid id);
+        public Task UpdateNameAsync(Information information);
     }
 }

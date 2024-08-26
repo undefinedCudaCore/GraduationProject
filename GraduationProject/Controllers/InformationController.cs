@@ -69,5 +69,41 @@ namespace GraduationProject.Controllers
         {
             return await _informationService.GetOneUserInformationByUserIdAsync(id);
         }
+
+        [HttpPut("update_user_firstname")]
+        public async Task UpdateFirstNameAsync([FromForm] Guid userId, [FromForm] string firstName)
+        {
+            await _informationService.UpdateUserFirstNameAsync(userId, firstName);
+        }
+
+        [HttpPut("update_user_lastname")]
+        public async Task UpdateUserLastNameAsync([FromForm] Guid userId, [FromForm] string lastName)
+        {
+            await _informationService.UpdateUserLastNameAsync(userId, lastName);
+        }
+
+        [HttpPut("update_user_personal_code")]
+        public async Task UpdateUserPersonalCodeAsync([FromForm] Guid userId, [FromForm] long personalCode)
+        {
+            await _informationService.UpdateUserPersonalCodeAsync(userId, personalCode);
+        }
+
+        [HttpPut("update_user_phone_number")]
+        public async Task UpdateUserPhoneNumberAsync([FromForm] Guid userId, [FromForm] string phoneNumber)
+        {
+            await _informationService.UpdateUserPhoneNumberAsync(userId, phoneNumber);
+        }
+
+        [HttpPut("update_user_email_address")]
+        public async Task UpdateUserEmailAddressAsync([FromForm] Guid userId, [FromForm] string emailAddress)
+        {
+            await _informationService.UpdateUserEmailAddressAsync(userId, emailAddress);
+        }
+
+        [HttpPut("update_user_avatar")]
+        public async Task UpdateUserImageAsync([FromForm] Guid userId, [FromForm] UserImageDto image)
+        {
+            await _informationService.UpdateUserImageAsync(userId, image);
+        }
     }
 }
