@@ -73,6 +73,8 @@ namespace GraduationProject.Controllers
         [HttpPut("update_user_firstname")]
         public async Task UpdateFirstNameAsync([FromForm] Guid userId, [FromForm] string firstName)
         {
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
             await _informationService.UpdateUserFirstNameAsync(userId, firstName);
         }
 

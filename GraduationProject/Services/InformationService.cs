@@ -82,7 +82,7 @@ namespace GraduationProject.Services
                 userInformation.FirstName = firstName;
             }
 
-            _userInformationRepository.UpdateNameAsync(userInformation);
+            await _userInformationRepository.UpdateAsync(userInformation);
         }
 
         public async Task UpdateUserLastNameAsync(Guid userId, string lastName)
@@ -93,7 +93,7 @@ namespace GraduationProject.Services
                 userInformation.LastName = lastName;
             }
 
-            _userInformationRepository.UpdateNameAsync(userInformation);
+            await _userInformationRepository.UpdateAsync(userInformation);
         }
 
         public async Task UpdateUserPersonalCodeAsync(Guid userId, long personalCode)
@@ -104,7 +104,7 @@ namespace GraduationProject.Services
                 userInformation.PersonalCode = personalCode;
             }
 
-            _userInformationRepository.UpdateNameAsync(userInformation);
+            await _userInformationRepository.UpdateAsync(userInformation);
         }
 
         public async Task UpdateUserPhoneNumberAsync(Guid userId, string phoneNumber)
@@ -115,7 +115,7 @@ namespace GraduationProject.Services
                 userInformation.PhoneNumber = phoneNumber;
             }
 
-            _userInformationRepository.UpdateNameAsync(userInformation);
+            await _userInformationRepository.UpdateAsync(userInformation);
         }
 
         public async Task UpdateUserEmailAddressAsync(Guid userId, string emailAddress)
@@ -126,7 +126,7 @@ namespace GraduationProject.Services
                 userInformation.EmailAddress = emailAddress;
             }
 
-            _userInformationRepository.UpdateNameAsync(userInformation);
+            await _userInformationRepository.UpdateAsync(userInformation);
         }
 
         public async Task UpdateUserImageAsync(Guid userId, UserImageDto image)
@@ -151,7 +151,7 @@ namespace GraduationProject.Services
                 userInformation.FileData = imageBytes;
             }
 
-            _userInformationRepository.UpdateNameAsync(userInformation);
+            await _userInformationRepository.UpdateAsync(userInformation);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace GraduationProject.Services
             return userResidence;
         }
 
-        public async Task<Residence?> GetResidenceByIdAsync(Guid id)
+        public async Task<Residence?> GetResidenceByInfoIdAsync(Guid id)
         {
             return await _userResidenceRepository.GetUserResidenceByInformationIdAsync(id);
         }
@@ -70,6 +70,50 @@ namespace GraduationProject.Services
             }
 
             await _userResidenceRepository.AddUserResidenceAsync(userResidence);
+        }
+
+        public async Task UpdateUserCityAsync(Guid informationId, string street)
+        {
+            var userResidence = GetResidenceByInfoIdAsync(informationId).Result;
+            if (userResidence != null)
+            {
+                userResidence.City = street;
+            }
+
+            await _userResidenceRepository.UpdateAsync(userResidence);
+        }
+
+        public async Task UpdateUserStreetAsync(Guid informationId, string street)
+        {
+            var userResidence = GetResidenceByInfoIdAsync(informationId).Result;
+            if (userResidence != null)
+            {
+                userResidence.Street = street;
+            }
+
+            await _userResidenceRepository.UpdateAsync(userResidence);
+        }
+
+        public async Task UpdateUserHouseNumberAsync(Guid informationId, string houseNumber)
+        {
+            var userResidence = GetResidenceByInfoIdAsync(informationId).Result;
+            if (userResidence != null)
+            {
+                userResidence.HouseNumber = houseNumber;
+            }
+
+            await _userResidenceRepository.UpdateAsync(userResidence);
+        }
+
+        public async Task UpdateUseApartmentNumberAsync(Guid informationId, string apartmentNumber)
+        {
+            var userResidence = GetResidenceByInfoIdAsync(informationId).Result;
+            if (userResidence != null)
+            {
+                userResidence.ApartmentNumber = apartmentNumber;
+            }
+
+            await _userResidenceRepository.UpdateAsync(userResidence);
         }
     }
 }
