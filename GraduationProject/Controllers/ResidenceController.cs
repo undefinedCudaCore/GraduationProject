@@ -31,6 +31,12 @@ namespace GraduationProject.Controllers
             return await _residenceService.GetResidenceByInfoIdAsync(id);
         }
 
+        [HttpGet("get_residence_by_residence_id/{id:Guid}")]
+        public async Task<Residence?> GetResidenceByResidenceIdAsync(Guid id)
+        {
+            return await _residenceService.GetResidenceByResidenceIdAsync(id);
+        }
+
         [HttpPost("create_new_user_residence")]
         public async Task AddResidenceAsync([FromForm] CreateUserResidenceDto request)
         {

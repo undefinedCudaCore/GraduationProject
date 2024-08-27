@@ -54,7 +54,7 @@ namespace GraduationProject.Services
             }
         }
 
-        private async Task<Residence?> GetResidenceByResidenceIdAsync(Guid id)
+        public async Task<Residence?> GetResidenceByResidenceIdAsync(Guid id)
         {
             try
             {
