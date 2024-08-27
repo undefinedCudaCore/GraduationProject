@@ -54,6 +54,18 @@ namespace GraduationProject.Services
             }
         }
 
+        private async Task<Residence?> GetResidenceByResidenceIdAsync(Guid id)
+        {
+            try
+            {
+                return await _userResidenceRepository.GetUserResidenceByResidenceIdAsync(id);
+            }
+            catch (NullReferenceException ex)
+            {
+                throw new NullReferenceException(ex.Message);
+            }
+        }
+
         public async Task AddUserResidenceAsync(CreateUserResidenceDto request, string user)
         {
             try
@@ -93,11 +105,11 @@ namespace GraduationProject.Services
             }
         }
 
-        public async Task UpdateUserCityAsync(Guid informationId, string street)
+        public async Task UpdateUserCityAsync(Guid residenceId, string street)
         {
             try
             {
-                var userResidence = GetResidenceByInfoIdAsync(informationId).Result;
+                var userResidence = GetResidenceByResidenceIdAsync(residenceId).Result;
                 if (userResidence != null)
                 {
                     userResidence.City = street;
@@ -111,11 +123,11 @@ namespace GraduationProject.Services
             }
         }
 
-        public async Task UpdateUserStreetAsync(Guid informationId, string street)
+        public async Task UpdateUserStreetAsync(Guid residenceId, string street)
         {
             try
             {
-                var userResidence = GetResidenceByInfoIdAsync(informationId).Result;
+                var userResidence = GetResidenceByResidenceIdAsync(residenceId).Result;
                 if (userResidence != null)
                 {
                     userResidence.Street = street;
@@ -129,11 +141,11 @@ namespace GraduationProject.Services
             }
         }
 
-        public async Task UpdateUserHouseNumberAsync(Guid informationId, string houseNumber)
+        public async Task UpdateUserHouseNumberAsync(Guid residenceId, string houseNumber)
         {
             try
             {
-                var userResidence = GetResidenceByInfoIdAsync(informationId).Result;
+                var userResidence = GetResidenceByResidenceIdAsync(residenceId).Result;
                 if (userResidence != null)
                 {
                     userResidence.HouseNumber = houseNumber;
@@ -147,11 +159,11 @@ namespace GraduationProject.Services
             }
         }
 
-        public async Task UpdateUseApartmentNumberAsync(Guid informationId, string apartmentNumber)
+        public async Task UpdateUseApartmentNumberAsync(Guid residenceId, string apartmentNumber)
         {
             try
             {
-                var userResidence = GetResidenceByInfoIdAsync(informationId).Result;
+                var userResidence = GetResidenceByResidenceIdAsync(residenceId).Result;
                 if (userResidence != null)
                 {
                     userResidence.ApartmentNumber = apartmentNumber;

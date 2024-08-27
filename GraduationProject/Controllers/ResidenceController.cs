@@ -40,27 +40,27 @@ namespace GraduationProject.Controllers
         }
 
         [HttpPut("update_user_city")]
-        public async Task UpdateUserCityAsync([FromForm] Guid informationId, [FromForm] string city)
+        public async Task UpdateUserCityAsync([FromForm] Guid residenceId, [FromForm] string city)
         {
-            await _residenceService.UpdateUserCityAsync(informationId, city);
+            await _residenceService.UpdateUserCityAsync(residenceId, city);
         }
 
         [HttpPut("update_user_street")]
-        public async Task UpdateUserStreetAsync([FromForm] Guid informationId, [FromForm] string street)
+        public async Task UpdateUserStreetAsync([FromForm] Guid residenceId, [FromForm] string street)
         {
-            await _residenceService.UpdateUserStreetAsync(informationId, street);
+            await _residenceService.UpdateUserStreetAsync(residenceId, street);
         }
 
         [HttpPut("update_user_house_number")]
-        public async Task UpdateUserHouseNumberAsync([FromForm] Guid informationId, [FromForm] string houseNumber)
+        public async Task UpdateUserHouseNumberAsync([FromForm] Guid residenceId, [FromForm] string houseNumber)
         {
-            await _residenceService.UpdateUserHouseNumberAsync(informationId, houseNumber);
+            await _residenceService.UpdateUserHouseNumberAsync(residenceId, houseNumber);
         }
 
         [HttpPut("update_user_apartment_number")]
-        public async Task UpdateUserApartmentNumberAsync([FromForm] Guid informationId, [FromForm] string apartmentNumber)
+        public async Task UpdateUserApartmentNumberAsync([FromForm] Guid residenceId, [FromForm] string apartmentNumber)
         {
-            await _residenceService.UpdateUseApartmentNumberAsync(informationId, apartmentNumber);
+            await _residenceService.UpdateUseApartmentNumberAsync(residenceId, apartmentNumber);
         }
     }
 }
