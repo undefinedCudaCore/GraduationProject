@@ -46,27 +46,35 @@ namespace GraduationProject.Controllers
         }
 
         [HttpPut("update_user_city")]
-        public async Task UpdateUserCityAsync([FromForm] Guid residenceId, [FromForm] string city)
+        public async Task UpdateUserCityAsync([FromForm] Guid userId, [FromForm] Guid residenceId, [FromForm] string city)
         {
-            await _residenceService.UpdateUserCityAsync(residenceId, city);
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            await _residenceService.UpdateUserCityAsync(userId, residenceId, city, user);
         }
 
         [HttpPut("update_user_street")]
-        public async Task UpdateUserStreetAsync([FromForm] Guid residenceId, [FromForm] string street)
+        public async Task UpdateUserStreetAsync([FromForm] Guid userId, [FromForm] Guid residenceId, [FromForm] string street)
         {
-            await _residenceService.UpdateUserStreetAsync(residenceId, street);
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            await _residenceService.UpdateUserStreetAsync(userId, residenceId, street, user);
         }
 
         [HttpPut("update_user_house_number")]
-        public async Task UpdateUserHouseNumberAsync([FromForm] Guid residenceId, [FromForm] string houseNumber)
+        public async Task UpdateUserHouseNumberAsync([FromForm] Guid userId, [FromForm] Guid residenceId, [FromForm] string houseNumber)
         {
-            await _residenceService.UpdateUserHouseNumberAsync(residenceId, houseNumber);
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            await _residenceService.UpdateUserHouseNumberAsync(userId, residenceId, houseNumber, user);
         }
 
         [HttpPut("update_user_apartment_number")]
-        public async Task UpdateUserApartmentNumberAsync([FromForm] Guid residenceId, [FromForm] string apartmentNumber)
+        public async Task UpdateUserApartmentNumberAsync([FromForm] Guid userId, [FromForm] Guid residenceId, [FromForm] string apartmentNumber)
         {
-            await _residenceService.UpdateUseApartmentNumberAsync(residenceId, apartmentNumber);
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            await _residenceService.UpdateUseApartmentNumberAsync(userId, residenceId, apartmentNumber, user);
         }
     }
 }

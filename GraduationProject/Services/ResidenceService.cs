@@ -105,14 +105,23 @@ namespace GraduationProject.Services
             }
         }
 
-        public async Task UpdateUserCityAsync(Guid residenceId, string street)
+        public async Task UpdateUserCityAsync(Guid userId, Guid residenceId, string street, string user)
         {
             try
             {
                 var userResidence = GetResidenceByResidenceIdAsync(residenceId).Result;
-                if (userResidence != null)
+
+                var currUser = _userRepository.Get(user);
+                if (userId == currUser.UserId)
                 {
-                    userResidence.City = street;
+                    if (userResidence != null)
+                    {
+                        userResidence.City = street;
+                    }
+                }
+                else
+                {
+                    return;
                 }
 
                 await _userResidenceRepository.UpdateAsync(userResidence);
@@ -123,14 +132,23 @@ namespace GraduationProject.Services
             }
         }
 
-        public async Task UpdateUserStreetAsync(Guid residenceId, string street)
+        public async Task UpdateUserStreetAsync(Guid userId, Guid residenceId, string street, string user)
         {
             try
             {
                 var userResidence = GetResidenceByResidenceIdAsync(residenceId).Result;
-                if (userResidence != null)
+
+                var currUser = _userRepository.Get(user);
+                if (userId == currUser.UserId)
                 {
-                    userResidence.Street = street;
+                    if (userResidence != null)
+                    {
+                        userResidence.Street = street;
+                    }
+                }
+                else
+                {
+                    return;
                 }
 
                 await _userResidenceRepository.UpdateAsync(userResidence);
@@ -141,15 +159,25 @@ namespace GraduationProject.Services
             }
         }
 
-        public async Task UpdateUserHouseNumberAsync(Guid residenceId, string houseNumber)
+        public async Task UpdateUserHouseNumberAsync(Guid userId, Guid residenceId, string houseNumber, string user)
         {
             try
             {
                 var userResidence = GetResidenceByResidenceIdAsync(residenceId).Result;
-                if (userResidence != null)
+
+                var currUser = _userRepository.Get(user);
+                if (userId == currUser.UserId)
                 {
-                    userResidence.HouseNumber = houseNumber;
+                    if (userResidence != null)
+                    {
+                        userResidence.HouseNumber = houseNumber;
+                    }
                 }
+                else
+                {
+                    return;
+                }
+
 
                 await _userResidenceRepository.UpdateAsync(userResidence);
             }
@@ -159,14 +187,23 @@ namespace GraduationProject.Services
             }
         }
 
-        public async Task UpdateUseApartmentNumberAsync(Guid residenceId, string apartmentNumber)
+        public async Task UpdateUseApartmentNumberAsync(Guid userId, Guid residenceId, string apartmentNumber, string user)
         {
             try
             {
                 var userResidence = GetResidenceByResidenceIdAsync(residenceId).Result;
-                if (userResidence != null)
+
+                var currUser = _userRepository.Get(user);
+                if (userId == currUser.UserId)
                 {
-                    userResidence.ApartmentNumber = apartmentNumber;
+                    if (userResidence != null)
+                    {
+                        userResidence.ApartmentNumber = apartmentNumber;
+                    }
+                }
+                else
+                {
+                    return;
                 }
 
                 await _userResidenceRepository.UpdateAsync(userResidence);
