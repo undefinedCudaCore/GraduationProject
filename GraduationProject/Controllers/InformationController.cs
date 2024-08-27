@@ -34,23 +34,6 @@ namespace GraduationProject.Controllers
             return await _informationService.GetAllInformationsAsync();
         }
 
-        [HttpPost("add_user_information")]
-        public async Task CreateUserInformationAsync([FromForm] CreateUserInformationDto request)
-        {
-            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
-
-            if (string.IsNullOrEmpty(request.FirstName)
-                || string.IsNullOrEmpty(request.LastName)
-                || string.IsNullOrEmpty(request.PhoneNumber)
-                || request.FirstName.Length == 0
-                || string.IsNullOrEmpty(request.EmailAddress))
-            {
-                _logger.LogError("Some user input information is missing");
-                return;
-            }
-            await _informationService.AddUserInformationAsync(request, user);
-        }
-
         [HttpGet("download_image_by_user_id/{id:Guid}")]
         public async Task<IActionResult> DownloadUserAvatarAsync(Guid id)
         {
@@ -70,42 +53,69 @@ namespace GraduationProject.Controllers
             return await _informationService.GetOneUserInformationByUserIdAsync(id);
         }
 
+        [HttpPost("add_user_information")]
+        public async Task CreateUserInformationAsync([FromForm] CreateUserInformationDto request)
+        {
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            if (string.IsNullOrEmpty(request.FirstName)
+                || string.IsNullOrEmpty(request.LastName)
+                || string.IsNullOrEmpty(request.PhoneNumber)
+                || request.FirstName.Length == 0
+                || string.IsNullOrEmpty(request.EmailAddress))
+            {
+                _logger.LogError("Some user input information is missing");
+                return;
+            }
+            await _informationService.AddUserInformationAsync(request, user);
+        }
+
         [HttpPut("update_user_firstname")]
         public async Task UpdateFirstNameAsync([FromForm] Guid userId, [FromForm] string firstName)
         {
             var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
 
-            await _informationService.UpdateUserFirstNameAsync(userId, firstName);
+            await _informationService.UpdateUserFirstNameAsync(userId, firstName, user);
         }
 
         [HttpPut("update_user_lastname")]
         public async Task UpdateUserLastNameAsync([FromForm] Guid userId, [FromForm] string lastName)
         {
-            await _informationService.UpdateUserLastNameAsync(userId, lastName);
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            await _informationService.UpdateUserLastNameAsync(userId, lastName, user);
         }
 
         [HttpPut("update_user_personal_code")]
         public async Task UpdateUserPersonalCodeAsync([FromForm] Guid userId, [FromForm] long personalCode)
         {
-            await _informationService.UpdateUserPersonalCodeAsync(userId, personalCode);
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            await _informationService.UpdateUserPersonalCodeAsync(userId, personalCode, user);
         }
 
         [HttpPut("update_user_phone_number")]
         public async Task UpdateUserPhoneNumberAsync([FromForm] Guid userId, [FromForm] string phoneNumber)
         {
-            await _informationService.UpdateUserPhoneNumberAsync(userId, phoneNumber);
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            await _informationService.UpdateUserPhoneNumberAsync(userId, phoneNumber, user);
         }
 
         [HttpPut("update_user_email_address")]
         public async Task UpdateUserEmailAddressAsync([FromForm] Guid userId, [FromForm] string emailAddress)
         {
-            await _informationService.UpdateUserEmailAddressAsync(userId, emailAddress);
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            await _informationService.UpdateUserEmailAddressAsync(userId, emailAddress, user);
         }
 
         [HttpPut("update_user_avatar")]
         public async Task UpdateUserImageAsync([FromForm] Guid userId, [FromForm] UserImageDto image)
         {
-            await _informationService.UpdateUserImageAsync(userId, image);
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            await _informationService.UpdateUserImageAsync(userId, image, user);
         }
     }
 }

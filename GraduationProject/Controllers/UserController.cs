@@ -12,22 +12,6 @@ namespace GraduationProject.Controllers
         private readonly IUserService _userService;
         private readonly IJwtService _jwtService;
 
-        public UserController(IUserService userService, IJwtService jwtService)
-        {
-            _userService = userService;
-            _jwtService = jwtService;
-        }
-        [HttpPost("register")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult Register(string username, string password, string role)
-        {
-            _userService.Register(username, password, role);
-
-            return Ok();
-        }
         [HttpGet("login")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -48,6 +32,23 @@ namespace GraduationProject.Controllers
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
             return await _userService.GetAllUsersAsync();
+        }
+
+        public UserController(IUserService userService, IJwtService jwtService)
+        {
+            _userService = userService;
+            _jwtService = jwtService;
+        }
+        [HttpPost("register")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult Register(string username, string password, string role)
+        {
+            _userService.Register(username, password, role);
+
+            return Ok();
         }
 
         [HttpDelete("delete_user")]
