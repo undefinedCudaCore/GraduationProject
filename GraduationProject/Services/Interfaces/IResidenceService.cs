@@ -7,10 +7,11 @@ namespace GraduationProject.Services.Interfaces
     {
         public Task<IEnumerable<Residence>> GetAllResidencesAsync();
         public Task<Residence?> GetResidenceByInfoIdAsync(Guid id);
+        public Task<Residence?> GetResidenceByResidenceIdAsync(Guid id);
         public Task AddUserResidenceAsync(CreateUserResidenceDto request, string user);
-        public Task UpdateUserCityAsync(Guid userId, string street);
-        public Task UpdateUserStreetAsync(Guid userId, string street);
-        public Task UpdateUserHouseNumberAsync(Guid userId, string houseNumber);
-        public Task UpdateUseApartmentNumberAsync(Guid userId, string apartmentNumber);
+        public Task UpdateUserCityAsync(Guid userId, Guid residenceId, string street, string user);
+        public Task UpdateUserStreetAsync(Guid userId, Guid residenceId, string street, string user);
+        public Task UpdateUserHouseNumberAsync(Guid userId, Guid residenceId, string houseNumber, string user);
+        public Task UpdateUseApartmentNumberAsync(Guid userId, Guid residenceId, string apartmentNumber, string user);
     }
 }

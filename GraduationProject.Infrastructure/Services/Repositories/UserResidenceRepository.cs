@@ -24,6 +24,11 @@ namespace GraduationProject.Infrastructure.Services.Repositories
             return await _dbContext.Residences.FirstOrDefaultAsync(x => x.InformationId == id);
         }
 
+        public async Task<Residence?> GetUserResidenceByResidenceIdAsync(Guid id)
+        {
+            return await _dbContext.Residences.FirstOrDefaultAsync(x => x.ResidenceId == id);
+        }
+
         public async Task<IList<Residence>> GetUserResidencesAsync()
         {
             return await _dbContext.Residences.ToListAsync();

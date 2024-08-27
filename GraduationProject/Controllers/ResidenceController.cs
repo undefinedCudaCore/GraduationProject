@@ -31,6 +31,12 @@ namespace GraduationProject.Controllers
             return await _residenceService.GetResidenceByInfoIdAsync(id);
         }
 
+        [HttpGet("get_residence_by_residence_id/{id:Guid}")]
+        public async Task<Residence?> GetResidenceByResidenceIdAsync(Guid id)
+        {
+            return await _residenceService.GetResidenceByResidenceIdAsync(id);
+        }
+
         [HttpPost("create_new_user_residence")]
         public async Task AddResidenceAsync([FromForm] CreateUserResidenceDto request)
         {
@@ -40,27 +46,35 @@ namespace GraduationProject.Controllers
         }
 
         [HttpPut("update_user_city")]
-        public async Task UpdateUserCityAsync([FromForm] Guid informationId, [FromForm] string city)
+        public async Task UpdateUserCityAsync([FromForm] Guid userId, [FromForm] Guid residenceId, [FromForm] string city)
         {
-            await _residenceService.UpdateUserCityAsync(informationId, city);
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            await _residenceService.UpdateUserCityAsync(userId, residenceId, city, user);
         }
 
         [HttpPut("update_user_street")]
-        public async Task UpdateUserStreetAsync([FromForm] Guid informationId, [FromForm] string street)
+        public async Task UpdateUserStreetAsync([FromForm] Guid userId, [FromForm] Guid residenceId, [FromForm] string street)
         {
-            await _residenceService.UpdateUserStreetAsync(informationId, street);
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            await _residenceService.UpdateUserStreetAsync(userId, residenceId, street, user);
         }
 
         [HttpPut("update_user_house_number")]
-        public async Task UpdateUserHouseNumberAsync([FromForm] Guid informationId, [FromForm] string houseNumber)
+        public async Task UpdateUserHouseNumberAsync([FromForm] Guid userId, [FromForm] Guid residenceId, [FromForm] string houseNumber)
         {
-            await _residenceService.UpdateUserHouseNumberAsync(informationId, houseNumber);
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            await _residenceService.UpdateUserHouseNumberAsync(userId, residenceId, houseNumber, user);
         }
 
         [HttpPut("update_user_apartment_number")]
-        public async Task UpdateUserApartmentNumberAsync([FromForm] Guid informationId, [FromForm] string apartmentNumber)
+        public async Task UpdateUserApartmentNumberAsync([FromForm] Guid userId, [FromForm] Guid residenceId, [FromForm] string apartmentNumber)
         {
-            await _residenceService.UpdateUseApartmentNumberAsync(informationId, apartmentNumber);
+            var user = ((ClaimsIdentity)User.Identity).Claims.FirstOrDefault().Value;
+
+            await _residenceService.UpdateUseApartmentNumberAsync(userId, residenceId, apartmentNumber, user);
         }
     }
 }
