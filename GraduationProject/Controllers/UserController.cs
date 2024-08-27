@@ -18,6 +18,10 @@ namespace GraduationProject.Controllers
             _jwtService = jwtService;
         }
         [HttpPost("register")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult Register(string username, string password, string role)
         {
             _userService.Register(username, password, role);
@@ -25,6 +29,10 @@ namespace GraduationProject.Controllers
             return Ok();
         }
         [HttpGet("login")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult Login(string username, string password)
         {
 
