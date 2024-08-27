@@ -25,133 +25,196 @@ namespace GraduationProject.Services
 
         public async Task<IEnumerable<Information>> GetAllInformationsAsync()
         {
-            var userInformations = await _userInformationRepository.GetUserInformationsAsync();
-
-            if (userInformations.Count < 1)
+            try
             {
-                _logger.LogWarning("There are no users in database");
-                _logger.LogInformation("Returning {0} users ", userInformations.Count);
-            }
+                var userInformations = await _userInformationRepository.GetUserInformationsAsync();
 
-            return userInformations;
+                if (userInformations.Count < 1)
+                {
+                    _logger.LogWarning("There are no users in database");
+                    _logger.LogInformation("Returning {0} users ", userInformations.Count);
+                }
+
+                return userInformations;
+            }
+            catch (NullReferenceException ex)
+            {
+                throw new NullReferenceException(ex.Message);
+            }
         }
 
         public async Task AddUserInformationAsync(CreateUserInformationDto request, string user)
         {
-            var uploadFolderPath = Path.Combine(_environment.WebRootPath, "uploads");
-
-            if (!Directory.Exists(uploadFolderPath))
+            try
             {
-                Directory.CreateDirectory(uploadFolderPath);
+                var uploadFolderPath = Path.Combine(_environment.WebRootPath, "uploads");
+
+                if (!Directory.Exists(uploadFolderPath))
+                {
+                    Directory.CreateDirectory(uploadFolderPath);
+                }
+
+                UserImageDto img = new UserImageDto { Image = request.Image };
+                var imageBytes = await _imageEditionService.ResizeImageAsync(img);
+
+                var userInformation = new Information
+                {
+                    InformationId = Guid.NewGuid(),
+                    FirstName = request.FirstName.Trim(),
+                    LastName = request.LastName.Trim(),
+                    PersonalCode = request.PersonalCode,
+                    PhoneNumber = request.PhoneNumber.Trim(),
+                    EmailAddress = request.EmailAddress.Trim(),
+                    FileName = request.Image?.FileName,
+                    FileData = imageBytes,
+                    UserId = _userRepository.GetUserId(user),
+                };
+
+                var currUser = _userRepository.Get(user);
+                if (currUser != null)
+                {
+                    currUser.InformationId = userInformation.InformationId;
+                }
+
+                await _userInformationRepository.AddUserInformationAsync(userInformation);
             }
-
-            UserImageDto img = new UserImageDto { Image = request.Image };
-            var imageBytes = await _imageEditionService.ResizeImageAsync(img);
-
-            var userInformation = new Information
+            catch (NullReferenceException ex)
             {
-                InformationId = Guid.NewGuid(),
-                FirstName = request.FirstName.Trim(),
-                LastName = request.LastName.Trim(),
-                PersonalCode = request.PersonalCode,
-                PhoneNumber = request.PhoneNumber.Trim(),
-                EmailAddress = request.EmailAddress.Trim(),
-                FileName = request.Image?.FileName,
-                FileData = imageBytes,
-                UserId = _userRepository.GetUserId(user),
-            };
-
-            var currUser = _userRepository.Get(user);
-            if (currUser != null)
-            {
-                currUser.InformationId = userInformation.InformationId;
+                throw new NullReferenceException(ex.Message);
             }
-
-            await _userInformationRepository.AddUserInformationAsync(userInformation);
         }
 
         public async Task<Information?> GetOneUserInformationByUserIdAsync(Guid id)
         {
-            return await _userInformationRepository.GetUserInformationByUserIdAsync(id);
+            try
+            {
+                return await _userInformationRepository.GetUserInformationByUserIdAsync(id);
+            }
+            catch (NullReferenceException ex)
+            {
+                throw new NullReferenceException(ex.Message);
+            }
         }
         public async Task UpdateUserFirstNameAsync(Guid userId, string firstName)
         {
-            var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
-            if (userInformation != null)
+            try
             {
-                userInformation.FirstName = firstName;
-            }
+                var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
+                if (userInformation != null)
+                {
+                    userInformation.FirstName = firstName;
+                }
 
-            await _userInformationRepository.UpdateAsync(userInformation);
+                await _userInformationRepository.UpdateAsync(userInformation);
+            }
+            catch (NullReferenceException ex)
+            {
+                throw new NullReferenceException(ex.Message);
+            }
         }
 
         public async Task UpdateUserLastNameAsync(Guid userId, string lastName)
         {
-            var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
-            if (userInformation != null)
+            try
             {
-                userInformation.LastName = lastName;
-            }
+                var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
+                if (userInformation != null)
+                {
+                    userInformation.LastName = lastName;
+                }
 
-            await _userInformationRepository.UpdateAsync(userInformation);
+                await _userInformationRepository.UpdateAsync(userInformation);
+            }
+            catch (NullReferenceException ex)
+            {
+                throw new NullReferenceException(ex.Message);
+            }
         }
 
         public async Task UpdateUserPersonalCodeAsync(Guid userId, long personalCode)
         {
-            var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
-            if (userInformation != null)
+            try
             {
-                userInformation.PersonalCode = personalCode;
-            }
+                var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
+                if (userInformation != null)
+                {
+                    userInformation.PersonalCode = personalCode;
+                }
 
-            await _userInformationRepository.UpdateAsync(userInformation);
+                await _userInformationRepository.UpdateAsync(userInformation);
+            }
+            catch (NullReferenceException ex)
+            {
+                throw new NullReferenceException(ex.Message);
+            }
         }
 
         public async Task UpdateUserPhoneNumberAsync(Guid userId, string phoneNumber)
         {
-            var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
-            if (userInformation != null)
+            try
             {
-                userInformation.PhoneNumber = phoneNumber;
-            }
+                var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
+                if (userInformation != null)
+                {
+                    userInformation.PhoneNumber = phoneNumber;
+                }
 
-            await _userInformationRepository.UpdateAsync(userInformation);
+                await _userInformationRepository.UpdateAsync(userInformation);
+            }
+            catch (NullReferenceException ex)
+            {
+                throw new NullReferenceException(ex.Message);
+            }
         }
 
         public async Task UpdateUserEmailAddressAsync(Guid userId, string emailAddress)
         {
-            var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
-            if (userInformation != null)
+            try
             {
-                userInformation.EmailAddress = emailAddress;
-            }
+                var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
+                if (userInformation != null)
+                {
+                    userInformation.EmailAddress = emailAddress;
+                }
 
-            await _userInformationRepository.UpdateAsync(userInformation);
+                await _userInformationRepository.UpdateAsync(userInformation);
+            }
+            catch (NullReferenceException ex)
+            {
+                throw new NullReferenceException(ex.Message);
+            }
         }
 
         public async Task UpdateUserImageAsync(Guid userId, UserImageDto image)
         {
-            var uploadFolderPath = Path.Combine(_environment.WebRootPath, "uploads");
-
-            if (!Directory.Exists(uploadFolderPath))
+            try
             {
-                Directory.CreateDirectory(uploadFolderPath);
+                var uploadFolderPath = Path.Combine(_environment.WebRootPath, "uploads");
+
+                if (!Directory.Exists(uploadFolderPath))
+                {
+                    Directory.CreateDirectory(uploadFolderPath);
+                }
+
+                var imageBytes = await _imageEditionService.ResizeImageAsync(image);
+
+                var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
+
+
+                if (userInformation != null)
+                {
+                    string updatedFile = "updated_avatar.jpg";
+
+                    userInformation.FileName = updatedFile;
+                    userInformation.FileData = imageBytes;
+                }
+
+                await _userInformationRepository.UpdateAsync(userInformation);
             }
-
-            var imageBytes = await _imageEditionService.ResizeImageAsync(image);
-
-            var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
-
-
-            if (userInformation != null)
+            catch (NullReferenceException ex)
             {
-                string updatedFile = "updated_avatar.jpg";
-
-                userInformation.FileName = updatedFile;
-                userInformation.FileData = imageBytes;
+                throw new NullReferenceException(ex.Message);
             }
-
-            await _userInformationRepository.UpdateAsync(userInformation);
         }
     }
 }
