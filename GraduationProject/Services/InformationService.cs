@@ -95,14 +95,23 @@ namespace GraduationProject.Services
                 throw new NullReferenceException(ex.Message);
             }
         }
-        public async Task UpdateUserFirstNameAsync(Guid userId, string firstName)
+        public async Task UpdateUserFirstNameAsync(Guid userId, string firstName, string user)
         {
             try
             {
                 var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
-                if (userInformation != null)
+
+                var currUser = _userRepository.Get(user);
+                if (userId == currUser.UserId)
                 {
-                    userInformation.FirstName = firstName;
+                    if (userInformation != null)
+                    {
+                        userInformation.FirstName = firstName;
+                    }
+                }
+                else
+                {
+                    return;
                 }
 
                 await _userInformationRepository.UpdateAsync(userInformation);
@@ -113,14 +122,23 @@ namespace GraduationProject.Services
             }
         }
 
-        public async Task UpdateUserLastNameAsync(Guid userId, string lastName)
+        public async Task UpdateUserLastNameAsync(Guid userId, string lastName, string user)
         {
             try
             {
                 var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
-                if (userInformation != null)
+
+                var currUser = _userRepository.Get(user);
+                if (userId == currUser.UserId)
                 {
-                    userInformation.LastName = lastName;
+                    if (userInformation != null)
+                    {
+                        userInformation.LastName = lastName;
+                    }
+                }
+                else
+                {
+                    return;
                 }
 
                 await _userInformationRepository.UpdateAsync(userInformation);
@@ -131,14 +149,23 @@ namespace GraduationProject.Services
             }
         }
 
-        public async Task UpdateUserPersonalCodeAsync(Guid userId, long personalCode)
+        public async Task UpdateUserPersonalCodeAsync(Guid userId, long personalCode, string user)
         {
             try
             {
                 var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
-                if (userInformation != null)
+
+                var currUser = _userRepository.Get(user);
+                if (userId == currUser.UserId)
                 {
-                    userInformation.PersonalCode = personalCode;
+                    if (userInformation != null)
+                    {
+                        userInformation.PersonalCode = personalCode;
+                    }
+                }
+                else
+                {
+                    return;
                 }
 
                 await _userInformationRepository.UpdateAsync(userInformation);
@@ -149,14 +176,23 @@ namespace GraduationProject.Services
             }
         }
 
-        public async Task UpdateUserPhoneNumberAsync(Guid userId, string phoneNumber)
+        public async Task UpdateUserPhoneNumberAsync(Guid userId, string phoneNumber, string user)
         {
             try
             {
                 var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
-                if (userInformation != null)
+
+                var currUser = _userRepository.Get(user);
+                if (userId == currUser.UserId)
                 {
-                    userInformation.PhoneNumber = phoneNumber;
+                    if (userInformation != null)
+                    {
+                        userInformation.PhoneNumber = phoneNumber;
+                    }
+                }
+                else
+                {
+                    return;
                 }
 
                 await _userInformationRepository.UpdateAsync(userInformation);
@@ -167,14 +203,23 @@ namespace GraduationProject.Services
             }
         }
 
-        public async Task UpdateUserEmailAddressAsync(Guid userId, string emailAddress)
+        public async Task UpdateUserEmailAddressAsync(Guid userId, string emailAddress, string user)
         {
             try
             {
                 var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
-                if (userInformation != null)
+
+                var currUser = _userRepository.Get(user);
+                if (userId == currUser.UserId)
                 {
-                    userInformation.EmailAddress = emailAddress;
+                    if (userInformation != null)
+                    {
+                        userInformation.EmailAddress = emailAddress;
+                    }
+                }
+                else
+                {
+                    return;
                 }
 
                 await _userInformationRepository.UpdateAsync(userInformation);
@@ -185,7 +230,7 @@ namespace GraduationProject.Services
             }
         }
 
-        public async Task UpdateUserImageAsync(Guid userId, UserImageDto image)
+        public async Task UpdateUserImageAsync(Guid userId, UserImageDto image, string user)
         {
             try
             {
@@ -200,13 +245,20 @@ namespace GraduationProject.Services
 
                 var userInformation = GetOneUserInformationByUserIdAsync(userId).Result;
 
-
-                if (userInformation != null)
+                var currUser = _userRepository.Get(user);
+                if (userId == currUser.UserId)
                 {
-                    string updatedFile = "updated_avatar.jpg";
+                    if (userInformation != null)
+                    {
+                        string updatedFile = "updated_avatar.jpg";
 
-                    userInformation.FileName = updatedFile;
-                    userInformation.FileData = imageBytes;
+                        userInformation.FileName = updatedFile;
+                        userInformation.FileData = imageBytes;
+                    }
+                }
+                else
+                {
+                    return;
                 }
 
                 await _userInformationRepository.UpdateAsync(userInformation);
