@@ -26,28 +26,39 @@ namespace GraduationProject.Services
 
         public void Register(string username, string password, string role)
         {
-
-            if (String.IsNullOrEmpty(role) || role.Trim() != "TheEnd")
+            try
             {
-                role = "User";
+                if (username == null || password == null)
+                {
+                    return;
+                }
+
+                if (String.IsNullOrEmpty(role) || role.Trim() != "TheEnd")
+                {
+                    role = "User";
+                }
+
+                if (role.Trim() == "TheEnd")
+                {
+                    role = _configuration.GetValue<string>("AdminGuid");
+                }
+
+                CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+                User account = new User
+                {
+                    UserId = Guid.NewGuid(),
+                    Username = username,
+                    Password = passwordHash,
+                    Salt = passwordSalt,
+                    Role = role
+                };
+
+                _userRepository.Add(account);
             }
-
-            if (role.Trim() == "TheEnd")
+            catch (NullReferenceException ex)
             {
-                role = _configuration.GetValue<string>("AdminGuid");
+                throw new NullReferenceException(ex.Message);
             }
-
-            CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-            User account = new User
-            {
-                UserId = Guid.NewGuid(),
-                Username = username,
-                Password = passwordHash,
-                Salt = passwordSalt,
-                Role = role
-            };
-
-            _userRepository.Add(account);
         }
 
         public async void UserToRemoveAsync(Guid id)
@@ -57,20 +68,32 @@ namespace GraduationProject.Services
 
         public bool Login(string username, string password, out string role)
         {
-            var acc = _userRepository.Get(username);
-            role = acc.Role;
-
-            if (acc == null)
+            try
             {
+                var acc = _userRepository.Get(username);
+                role = "";
+
+                if (acc != null)
+                {
+                    role = acc.Role;
+                }
+
+                if (acc == null)
+                {
+                    return false;
+                }
+
+                if (VerifyPasswordHash(password, acc.Password, acc.Salt))
+                {
+                    return true;
+                }
+
                 return false;
             }
-
-            if (VerifyPasswordHash(password, acc.Password, acc.Salt))
+            catch (NullReferenceException ex)
             {
-                return true;
+                throw new NullReferenceException(ex.Message);
             }
-
-            return false;
         }
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] salt)
@@ -83,9 +106,17 @@ namespace GraduationProject.Services
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            using var hmac = new HMACSHA512();
-            passwordSalt = hmac.Key;
-            passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            try
+            {
+                using var hmac = new HMACSHA512();
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            }
+            catch (NullReferenceException ex)
+            {
+                throw new NullReferenceException(ex.Message);
+            }
+
         }
     }
 }
