@@ -12,6 +12,12 @@ namespace GraduationProject.Controllers
         private readonly IUserService _userService;
         private readonly IJwtService _jwtService;
 
+        public UserController(IUserService userService, IJwtService jwtService)
+        {
+            _userService = userService;
+            _jwtService = jwtService;
+        }
+
         [HttpGet("login")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -34,11 +40,6 @@ namespace GraduationProject.Controllers
             return await _userService.GetAllUsersAsync();
         }
 
-        public UserController(IUserService userService, IJwtService jwtService)
-        {
-            _userService = userService;
-            _jwtService = jwtService;
-        }
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
