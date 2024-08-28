@@ -11,9 +11,9 @@ namespace GraduationProject.Services
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
 
-        public UserService(IUserRepository accountRepository, IConfiguration configuration)
+        public UserService(IUserRepository userRepository, IConfiguration configuration)
         {
-            _userRepository = accountRepository;
+            _userRepository = userRepository;
             _configuration = configuration;
         }
 
@@ -29,6 +29,11 @@ namespace GraduationProject.Services
             try
             {
                 if (username == null || password == null)
+                {
+                    return;
+                }
+
+                if (IsUserRegistered(username))
                 {
                     return;
                 }
@@ -59,6 +64,15 @@ namespace GraduationProject.Services
             {
                 throw new NullReferenceException(ex.Message);
             }
+        }
+
+        private bool IsUserRegistered(string username)
+        {
+            if (_userRepository.Get(username) != null)
+            {
+                return true;
+            }
+            return false;
         }
 
         public async void UserToRemoveAsync(Guid id)
